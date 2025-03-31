@@ -10,6 +10,8 @@ const {
     try {
       const { question } = req.body;
       const files = req.files || [];
+      console.log("Received files:", req.files); // Add this line
+    console.log("Received question:", req.body.question);
       
       let answer;
       if (/GA1|Graded Assignment 1/i.test(question)) {
@@ -30,10 +32,13 @@ const {
       else {
         answer = 'Could not determine assignment number';
       }
-      
+      if (!question) {
+        return res.status(400).json({ answer: 'Question is required' });
+      }
       res.json({ answer });
     } catch (error) {
       console.error('Error:', error);
       res.status(400).json({ answer: 'Error processing question' });
     }
   };
+  module.exports = { processQuestion };
